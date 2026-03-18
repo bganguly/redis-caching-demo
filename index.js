@@ -1,10 +1,12 @@
 const express = require('express');
 const { createClient } = require('redis');
+const cors = require('cors');
 
 const app = express();
 const client = createClient();
 client.connect();
 
+app.use(cors());
 let cacheHits = 0;
 let cacheMisses = 0;
 
