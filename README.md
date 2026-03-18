@@ -130,7 +130,9 @@ node index.js
 ```bash
 k6 run load.js
 ```
+### 4. for the cdn simulator repo
 
+mkdir -p /tmp/nginx_*
 ---
 
 ## 🧭 Key Takeaways

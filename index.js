@@ -10,7 +10,10 @@ if (USE_REDIS) {
   client.connect();
 }
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  exposedHeaders: ['X-Cache', 'X-Cache-Status']
+}));
 let cacheHits = 0;
 let cacheMisses = 0;
 
@@ -19,6 +22,7 @@ app.get('/api/data', async (req, res) => {
 
   if (cached) {
     cacheHits++;
+    res.set('X-Cache', 'HIT');
     return res.json({ source: 'cache', data: JSON.parse(cached) });
   }
 
