@@ -5,20 +5,29 @@ const app = express();
 const client = createClient();
 client.connect();
 
+let cacheHits = 0;
+let cacheMisses = 0;
+
 app.get('/api/data', async (req, res) => {
   const cached = await client.get('data');
 
   if (cached) {
+    cacheHits++;
     return res.json({ source: 'cache', data: JSON.parse(cached) });
   }
 
-  // simulate slow DB
-  await new Promise(r => setTimeout(r, 200));
-  const data = { message: 'data' };
+  cacheMisses++;
 
-  await client.set('data', JSON.stringify(data), { EX: 60 });
+  const data = { message: 'data', ts: Date.now() };
+  await new Promise(r => setTimeout(r, 500)); // simulate slow backend
 
-  res.json({ source: 'db', data });
+  await client.set('data', JSON.stringify(data), { EX: 10 });
+  res.set('X-Cache', cached ? 'HIT' : 'MISS');
+  res.json({ source: 'server', data });
 });
 
-app.listen(3000, () => console.log('Server with Redis'));
+app.get('/metrics', (req, res) => {
+  res.json({ cacheHits, cacheMisses });
+});
+
+app.listen(3000, () => console.log('Server with Redis on port 3000'));
