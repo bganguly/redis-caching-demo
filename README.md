@@ -15,11 +15,31 @@ It simulates a slow backend and shows how caching reduces latency and improves s
 
 ---
 
-## ⚙️ Tech Stack
+## ✅ Requirements
 
-* Node.js (Express)
-* Redis
-* k6 (for load testing)
+* Node.js 18+
+* Redis server
+* k6 CLI (for load testing)
+
+Install Redis:
+
+```bash
+# macOS (Homebrew)
+brew install redis
+```
+
+Install k6:
+
+```bash
+# macOS (Homebrew)
+brew install k6
+```
+
+Install Node dependencies:
+
+```bash
+npm install
+```
 
 ---
 
